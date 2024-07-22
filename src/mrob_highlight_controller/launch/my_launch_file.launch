@@ -1,0 +1,41 @@
+<launch>
+
+<!--load the parameter file in the launch file-->
+<rosparam command="load" file="$(find mrob_highlight_controller)/config/default.yaml" />
+
+<!-- Launch RViz with the specified configuration file -->
+<!-- <node pkg="rviz" type="rviz" name="rviz" args="-d $(find mrob_highlight_controller)/rviz/rviz_file.rviz" /> -->
+
+
+<!--include all the nodes in the launch file, so that when this launch file is run, all nodes run too-->
+
+<!-- Define a parameter to choose which node to run -->
+<arg name="run_emergency_stop"  default="true"/>
+<arg name="run_crash_stop"      default="false"/>
+
+<!-- Launch robot_emergency_stop_client Node -->
+<group if="$(arg run_emergency_stop)">
+    <node pkg="mrob_highlight_controller" type="robot_emergency_stop_client" name="emergency_stop" output="screen"/>
+</group>
+
+<!-- Launch robot_crash_stop_client Node -->
+<group unless="$(arg run_emergency_stop)">
+    <node pkg="mrob_highlight_controller" type="robot_crash_stop_client" name="crash_stop" output="screen"/>
+</group>
+
+<node pkg="mrob_highlight_controller" type="mrob_highlight_controller_pub_node" name="exercise2_pub_node" output="screen">
+    <!--This means that any communication sent to the topic /exercise2_pub_node/cmd_vel will be redirected to the topic /cmd_vel.-->
+    <remap from="/exercise2_pub_node/cmd_vel" to="/cmd_vel"/> 
+</node>
+
+<!-- <node name="rqt_multiplot" pkg="rqt_multiplot" type="rqt_multiplot" output="screen"/> -->
+
+<!-- inlcude data from launch file of another package, in your self-created launch file-->
+<include file="$(find mrob_gazebo)/launch/mrob_gazebo.launch">
+<arg name="world_file" value="$(find mrob_highlight_controller)/worlds/singlePillar.world"/>
+<!-- <arg name="world" value="singlePillar"/> --> 
+<arg name="enable_ekf" value="true"/>
+
+</include>
+
+</launch>

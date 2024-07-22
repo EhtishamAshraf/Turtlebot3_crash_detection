@@ -25,7 +25,7 @@ The `mrob_highlight_controller` package includes:
 
 ### Demo Video
 Click on the below image, to open the simulation video:
-
+[![Watch the video](https://github.com/EhtishamAshraf/Turtlebot3_crash_detection/blob/main/simulation_img.png)](https://youtu.be/E09mhgvatxQ)
 
 ## Installation
 1. Clone the repository on your PC:
